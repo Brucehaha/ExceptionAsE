@@ -1,0 +1,12 @@
+userinfo: uid, username, nickname, email, img
+blog: bient_idd, surfix, theme, title, summary, Fk(userinfo, unique) = OneToOne(userinfo)
+user2user: famous userID(userinfo), fans(userinfo)
+ReportError: UUNI, title, detail, user(userinfo), processor(userinfo, null)
+status(waiting, processing, finish), ctime, event
+category: caption, FK(blog, bid)
+tag: caption FK(blog, bid)
+article: id, title, summary, ctime, FK(Category), Category(Choices) for site category
+content: detail, OneToOne(article)
+article2tag: FK(article id), FK(tag id)
+isLike: FK(Article ID), FK(User ID), islike(True, False), union index(article ID, user ID)
+comment: id, content, FK(article), FK(user), ctime, parent_comm
