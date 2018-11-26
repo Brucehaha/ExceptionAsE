@@ -3,51 +3,117 @@ from django.db import models
 # Create your models here.
 
 
-class UserInfo(models.model):
-    """
-    user table
-    """
-    nid = models.AutoField(primary_key=True)
+class UserInfo(models.Model):
+    """ user table """
+    nid = models.BigAutoField(primary_key=True)
     username = models.CharField(max_length=32, unique=True)
     password = models.CharField(max_length=64)
     nickname = models.CharField(max_length=32)
     email = models.EmailField(unique=True)
     avatar = models.ImageField()
-    ctime = models.DateTimeField(verbose_name='Created time')
+    ctime = models.DateTimeField(verbose_name='created time')
     fans = models.ManyToManyField(to='UserInfo',
                                   related_name='f',
+                                  through='UserFans',
                                   through_fields=('user', 'follower'))
 
 
-class UserFans(models.model):
-    """
-    user to user
-    """
+class UserFans(models.Model):
+    """ user to user """
     user = models.ForeignKey(to='UserInfo',
                              verbose_name='blogger',
-                             to_fields='uid',
-                             related_name='users')
-    followers = models.ForeignKey(to='UserInfo',
-                                  verbose_name='followers',
-                                  to_fields='uid',
-                                  related_name='followers')
+                             to_field='nid',
+                             related_name='users',
+                             on_delete=models.CASCADE)
+    follower = models.ForeignKey(to='UserInfo',
+                                  to_field='nid',
+                                  related_name='followers',
+                                  on_delete=models.CASCADE)
 
     class Meta:
         unique_together = [
             ('user', 'follower'),
         ]
 
-class Blog
-class Category(models.Model):
-    """
-    user's personal categories
-    """
-    nid = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=32)
-    blog = models.ForeignKey(to='Blog', to_fields='nid')
 
-class IsLike(models.model):
-    Ar
+class Blog(models.Model):
+    """ Blog info """
+    nid = models.BigAutoField(primary_key=True)
+    title = models.CharField(max_length=64)
+    site = models.CharField(max_length=32, unique=True)
+    theme = models.CharField(max_length=32)
+    user = models.OneToOneField(to='UserInfo', to_field='nid', on_delete=models.CASCADE)
+
+
+class Category(models.Model):
+    """user's personal categories"""
+    nid = models.BigAutoField(primary_key=True)
+    title = models.CharField(max_length=32)
+    blog = models.ForeignKey(to='Blog', to_field='nid', on_delete=models.CASCADE)
+
+
+class Article(models.Model):
+    nid = models.BigAutoField(primary_key=True)
+    title = models.CharField(max_length=32)
+    summary = models.CharField(verbose_name="Article Summery", max_length=255)
+    read_count = models.IntegerField(default=0)
+    comment_count = models.IntegerField(default=0)
+    up_count = models.IntegerField(default=0)
+    down_count = models.IntegerField(default=0)
+    create_time = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+    category = models.ForeignKey(to='Category', to_field='nid', null=True, on_delete=models.CASCADE)
+    type_choices =[
+        (1, "Python"),
+        (2, "Linux"),
+        (3, "OpenStack"),
+        (4, "Golang"),
+    ]
+    type_id = models.IntegerField(choices=type_choices, default=None)
+    tags = models.ManyToManyField(
+        to="Tag",
+        through='Article2Tag',
+        through_fields=('article', 'tag'),
+    )
+
+
+class Article2Tag(models.Model):
+    article = models.ForeignKey(to='Article', to_field='nid', on_delete=models.CASCADE)
+    tag = models.ForeignKey(to='Tag', to_field='nid', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = [
+            ('article', 'tag'),
+        ]
+
+
+class Tag(models.Model):
+    nid = models.BigAutoField(primary_key=True)
+    title = models.CharField(verbose_name='tag name', max_length=32)
+    blog = models.ForeignKey(to='Blog', to_field='nid', on_delete=models.CASCADE)
+
+
+class UpDown(models.Model):
+    article = models.ForeignKey(to='Article', to_field='nid', on_delete=models.CASCADE)
+    user = models.ForeignKey(to='Userinfo', to_field='nid', on_delete=models.CASCADE)
+    islike = models.BooleanField()
+
+    class Meta:
+        unique_together = [
+            ('article', 'user'),
+        ]
+
+
+class Comment(models.Model):
+    article = models.ForeignKey(to='Article', to_field='nid', on_delete=models.CASCADE)
+    user = models.ForeignKey(to='Userinfo', to_field='nid', on_delete=models.CASCADE)
+    content = models.TextField()
+
+    class Meta:
+        unique_together = [
+            ('article', 'user'),
+        ]
+
 
 
 

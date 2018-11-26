@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from repository import models
 
-# Create your views here.
+
+def home(request, *args, **kwargs):
+    pass
