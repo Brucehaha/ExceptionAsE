@@ -6,19 +6,25 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="nav navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="#">All<span class="sr-only">(current)</span></a>
+      {% if not article_type_id %}
+          <a class="nav-link active" href="/">All</a>
+      {% else %}
+        <a class="nav-link" href="/">All</a>
+      {% endif %}
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Pricing</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
+        {% for item in  type_choices %}
+              <li class="nav-item">
+                {% if article_type_id == item.0  %}
+                    <a class="nav-link active" href="/all/{{ item.0 }}.html">{{ item.1 }}</a>
+                {% else %}
+                    <a class="nav-link" href="/all/{{ item.0 }}.html">{{ item.1 }}</a>
+                {% endif %}
+
+              </li>
+
+        {% endfor %}
     </ul>
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="nav navbar-nav ml-auto">
         {% if request.session.user_info %}
             <li>
                 <a href="/backend/index.html">{{ request.session.user_info.nickname }}</a>
@@ -35,6 +41,7 @@
             <li><a href="/logout.html">logout</a></li>
         {% else %}
             <li><a href="/login.html">Login</a></li>
+            <li><a style="padding-left: 2px; padding-right: 2px;" href="/login.html">|</a></li>
             <li><a href="/register.html">Register</a></li>
         {% endif %}
     </ul>

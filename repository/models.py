@@ -17,6 +17,9 @@ class UserInfo(models.Model):
                                   through='UserFans',
                                   through_fields=('user', 'follower'))
 
+    def __str__(self):
+        return self.username
+
 
 class UserFans(models.Model):
     """ user to user """
@@ -44,6 +47,9 @@ class Blog(models.Model):
     theme = models.CharField(max_length=32)
     user = models.OneToOneField(to='UserInfo', to_field='nid', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
+
 
 class Category(models.Model):
     """user's personal categories"""
@@ -51,18 +57,27 @@ class Category(models.Model):
     title = models.CharField(max_length=32)
     blog = models.ForeignKey(to='Blog', to_field='nid', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
+
 
 class Article(models.Model):
     nid = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=32)
-    summary = models.CharField(verbose_name="Article Summery", max_length=255)
+    summary = models.CharField(verbose_name="Article Summary", max_length=255)
     read_count = models.IntegerField(default=0)
     comment_count = models.IntegerField(default=0)
     up_count = models.IntegerField(default=0)
     down_count = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
-    category = models.ForeignKey(to='Category', to_field='nid', null=True, on_delete=models.CASCADE)
+    category = models.ForeignKey(to='Category',
+                                 to_field='nid',
+                                 null=True,
+                                 on_delete=models.CASCADE)
+    blog = models.ForeignKey(to='Blog',
+                             to_field='nid',
+                             on_delete=models.CASCADE)
     type_choices =[
         (1, "Python"),
         (2, "Linux"),
@@ -75,6 +90,9 @@ class Article(models.Model):
         through='Article2Tag',
         through_fields=('article', 'tag'),
     )
+
+    def __str__(self):
+        return self.title
 
 
 class Article2Tag(models.Model):
@@ -92,6 +110,8 @@ class Tag(models.Model):
     title = models.CharField(verbose_name='tag name', max_length=32)
     blog = models.ForeignKey(to='Blog', to_field='nid', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
 
 class UpDown(models.Model):
     article = models.ForeignKey(to='Article', to_field='nid', on_delete=models.CASCADE)
