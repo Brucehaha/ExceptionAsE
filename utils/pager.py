@@ -41,6 +41,7 @@ class Pagination(object):
     def page_list(self):
         start_rng = 1
         end_rng = 1
+        #if total page less than max pages, e.g only have 1 page
         if int(self.total_count/self.item_no) < self.max_page:
             self.max_page = int(self.total_count/self.item_no)
         # display all page no. if current page < e.g.7
@@ -77,6 +78,8 @@ class Pagination(object):
         else:
             last = "<li class='page-item'><a class='page-link' href ='%s/?p=%s'>Next</a></li></ul>"%(self.url, self.current_page+1)
         page_list.append(last)
+        if self.max_page <= 1:
+            return ""
         return mark_safe(' '.join(page_list))
 
 

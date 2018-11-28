@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/static/css/account.css"/>
+    <link rel="stylesheet" href="/static/css/commons.css"/>
+    <link rel="stylesheet" href="/static/css/row-avatar.css"/>
+    <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="login">
+        <div style="text-align:center"><h1>User Login</h1></div>
+    <form id="fm" method="post" action="/login.html">
+        {% csrf_token %}
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+      </div>
+      <div class="form-group">
+             <label for="check_code">Enter the code at the left</label>
+             <div class="row">
+                <div class="col-7">
+                    <input type="text" class="form-control" name="check_code" id="check_code" placeholder="Code">
+                </div>
+                 <div class="col-5">
+                     <img id="check_code" src="/check_code.html" >
+                 </div>
+             </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    </div>
+<script>
+    $('body').on('click','#check_code',function(e){
+        this.src = this.src+'?'
+    })
+</script>
+</body>
+</html>

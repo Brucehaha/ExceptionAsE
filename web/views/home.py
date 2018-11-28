@@ -13,7 +13,7 @@ def index(request, *args, **kwargs):
         base_url = ""
     article_count = models.Article.objects.filter(**kwargs).count()
     page_obj = Pagination(total_count=article_count,
-                          item_no=2,
+                          item_no=7,
                           current_page=request.GET.get('p'),
                           url=base_url)
     article_list = models.Article. \

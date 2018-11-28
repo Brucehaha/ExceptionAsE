@@ -11,7 +11,7 @@ class UserInfo(models.Model):
     nickname = models.CharField(max_length=32)
     email = models.EmailField(unique=True)
     avatar = models.ImageField()
-    ctime = models.DateTimeField(verbose_name='created time')
+    ctime = models.DateTimeField(verbose_name='created time', auto_now_add=True)
     fans = models.ManyToManyField(to='UserInfo',
                                   related_name='f',
                                   through='UserFans',
