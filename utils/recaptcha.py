@@ -54,9 +54,9 @@ def recaptcha(size=(120, 30),
         line_num = random.randint(*n_line)  # no. of interferential line
 
         for i in range(line_num):
-            # 起始点
+            # start
             begin = (random.randint(0, size[0]), random.randint(0, size[1]))
-            # 结束点
+            # end
             end = (random.randint(0, size[0]), random.randint(0, size[1]))
             draw.line([begin, end], fill=(0, 0, 0))
 

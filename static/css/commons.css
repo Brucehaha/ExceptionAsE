@@ -10,3 +10,6 @@ img{
 .hide{
     display:none!important;
 }
+ul {
+  list-style-type: none;
+}

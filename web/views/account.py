@@ -5,9 +5,6 @@ from ..forms.account import LoginForm
 from repository import models
 import json
 
-def login(request):
-    return render(request, 'login.html',{})
-
 
 def check_code(request):
     bcache = BytesIO()
@@ -15,6 +12,7 @@ def check_code(request):
     image.save(bcache, 'png')
     request.session['recapcha_code']=code
     return HttpResponse(bcache.getvalue())
+
 
 def login(request):
     """
