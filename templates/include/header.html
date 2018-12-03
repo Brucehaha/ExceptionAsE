@@ -26,23 +26,24 @@
     </ul>
     <ul class="nav navbar-nav ml-auto">
         {% if request.session.user_info %}
-            <li>
-                <a href="/backend/index.html">{{ request.session.user_info.nickname }}</a>
+            <li class="nav-item">
+                <a class="nav-link" href="/backend/index.html">{{ request.session.user_info.nickname }}</a>
             </li>
             {% if  request.session.user_info.blog__site %}
-                <li><a style="padding-left: 0;padding-right: 0;">·</a></li>
-                <li>
-                    <a href="/{{ request.session.user_info.blog__site }}.html">My Page</a>
+                <li class="nav-item">
+                    <a  class="nav-link" href="/{{ request.session.user_info.blog__site }}.html">
+                        My Blog
+                    </a>
+
                 </li>
             {% endif %}
-            <li><a style="padding-left: 0;padding-right: 0;">·</a></li>
-            <li><a href="/backend/index.html">Manage</a></li>
-            <li><a style="padding-left: 0;padding-right: 0;">|</a></li>
-            <li><a href="/logout.html">logout</a></li>
-        {% else %}
-            <li><a href="/login.html">Login</a></li>
-            <li><a style="padding-left: 2px; padding-right: 2px;" href="/login.html">|</a></li>
-            <li><a href="/register.html">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="/backend/index.html">Manage</a></li>
+            <li class="nav-item" style="margin:auto"><a >|</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout.html">Logout</a></li>
+             {% else %}
+            <li class="nav-item"><a class="nav-link" href="/login.html">Login</a></li>
+            <li class="nav-item" style="margin:auto">|<</li>
+            <li class="nav-item"><a class="nav-link" href="/register.html">Register</a></li>
         {% endif %}
     </ul>
   </div>

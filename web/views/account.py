@@ -28,11 +28,13 @@ def login(request):
         if form_obj.is_valid():
             email = form_obj.cleaned_data.get('email')
             password = form_obj.cleaned_data.get('password')
-            userinfo = models.UserInfo.objects.filter(email=email, password=password).values("username").first()
-            if userinfo:
+            user_info = models.UserInfo.objects.\
+                        filter(email=email, password=password).\
+                        values("nid","username", "email", "avatar", "blog__nid", 'blog__site').first()
+            if user_info:
                 data['status']=True
                 data['message'] = "thank you"
-                request.session['username']=userinfo
+                request.session['user_info']=user_info
                 if form_obj.cleaned_data.get('month'):
                     print(form_obj.cleaned_data.get('month'))
                     request.session.set_expiry(60 * 60 * 24 * 30)

@@ -11,40 +11,53 @@
 
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-info">
-  <a class="navbar-brand" href="#">{{ blog.site }}</a>
+ <div class="container">
+  <a class="navbar-brand" href="#">{{ blog.title }}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav  ml-auto">
-      <li class="nav-item ">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link " href="/{{ blog.site }}.html">About</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link"href="/backend/index.html">Manage</a>
-      </li>
+    <ul class="nav navbar-nav ml-auto">
+        {% if request.session.user_info %}
+            <li class="nav-item">
+                <a class="nav-link" href="/backend/index.html">{{ request.session.user_info.nickname }}</a>
+            </li>
+            {% if  request.session.user_info.blog__site %}
+                <li class="nav-item">
+                    <a  class="nav-link" href="/{{ request.session.user_info.blog__site }}.html">
+                        My Blog
+                    </a>
 
+                </li>
+            {% endif %}
+            <li class="nav-item"><a class="nav-link" href="/backend/index.html">Manage</a></li>
+            <li class="nav-item" style="margin:auto"><a >|</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout.html">Logout</a></li>
+             {% else %}
+            <li class="nav-item"><a class="nav-link" href="/login.html">Login</a></li>
+            <li class="nav-item" style="margin:auto">|<</li>
+            <li class="nav-item"><a class="nav-link" href="/register.html">Register</a></li>
+        {% endif %}
     </ul>
   </div>
+ </div>
 </nav>
 
-<div class="container">
+<div class="container my-5">
     <div class="row">
-        <div class="col-md-4 my-widget">
+        <div class="col-md-3 my-widget">
             <div class="body-menu">
             <div class="notice">
-                <div class="notice-header">Info</div>
                 <div class="notice-body">
-                    <ul>
-                        <li>User：{{ blog.user.nickname }}</li>
-                        <li>Followed：{{ blog.user.fans.count }}</li>
-                        <li>Following：{{ blog.user.f.count }}</li>
-                        <li>Email：{{ blog.user.email }}</li>
-                    </ul>
+                    <div>
+                        <div><img class="img-thumbnail" src="/static/img/hachiko1.jpg"></div>
+                        <div>User:{{ blog.user.nickname }}</div>
+                        <div>Followed:{{ blog.user.fans.count }}</div>
+                        <div>Following:{{ blog.user.f.count }}</div>
+                        <div>Email: {{ blog.user.email }}</div>
+                    </div>
                     <div class="motto">
                         When you are able to love yourself deeply, you can be kind to others.
                     </div>
@@ -83,7 +96,7 @@
             </div>
         </div>
          </div>
-        <div class="col-md-8 my-content">
+        <div class="col-md-9 my-content">
             {% block content %}
             {% endblock %}
         </div>

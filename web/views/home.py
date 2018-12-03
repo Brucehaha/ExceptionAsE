@@ -87,4 +87,28 @@ def filter(request, site, condition, val):
     }
     return render(request, 'site.html', data)
 
+def ArticleDetail(request, site, nid):
+    """
 
+    :param request:
+    :param site:
+    :param nid:
+    :return:
+    """
+    blog = models.Blog.objects.filter(site=site).select_related('user').first()
+    tag_list = models.Tag.objects.filter(blog=blog)
+    date_list = models.Article.objects.raw(
+        'select nid, count(nid) as num,strftime("%Y-%m",create_time) as ctime from repository_article group by strftime("%Y-%m",create_time)')
+
+    article = models.Article.objects.filter(blog=blog, nid=nid).select_related('category', 'articledetail').first()
+    comment_list = models.Comment.objects.filter(article=article).select_related('reply')
+    category_list = models.Category.objects.filter(blog=blog)
+    data = {
+        'blog': blog,
+        'article': article,
+        'comment_list': comment_list,
+        'tag_list': tag_list,
+        'category_list': category_list,
+        'date_list': date_list,
+    }
+    return render(request, 'article_detail.html', data)

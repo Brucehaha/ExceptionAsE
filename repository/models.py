@@ -34,6 +34,8 @@ class UserFans(models.Model):
                                   on_delete=models.CASCADE)
 
     class Meta:
+        verbose_name = 'Fan'
+        verbose_name_plural = 'Fans'
         unique_together = [
             ('user', 'follower'),
         ]
@@ -95,6 +97,14 @@ class Article(models.Model):
         return self.title
 
 
+class ArticleDetail(models.Model):
+    """
+    detail content of article
+    """
+    content = models.TextField()
+    article = models.OneToOneField(to='Article', to_field='nid', on_delete=models.CASCADE)
+
+
 class Article2Tag(models.Model):
     article = models.ForeignKey(to='Article', to_field='nid', on_delete=models.CASCADE)
     tag = models.ForeignKey(to='Tag', to_field='nid', on_delete=models.CASCADE)
@@ -125,14 +135,12 @@ class UpDown(models.Model):
 
 
 class Comment(models.Model):
+    nid = models.BigAutoField(primary_key=True)
+    created_time = models.DateTimeField(auto_now_add=True)
+    reply = models.ForeignKey(to='self', to_field='nid', default=None, null=True, blank=True, on_delete=models.SET_NULL)
     article = models.ForeignKey(to='Article', to_field='nid', on_delete=models.CASCADE)
     user = models.ForeignKey(to='Userinfo', to_field='nid', on_delete=models.CASCADE)
     content = models.TextField()
-
-    class Meta:
-        unique_together = [
-            ('article', 'user'),
-        ]
 
 
 

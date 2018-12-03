@@ -7,13 +7,10 @@
                     <div class="article-item clearfix">
                         <h3><a href="#">{{ row.title }}</a></h3>
                         <div class="clearfix">
-                            <a class="avatar left" href="#">
-                                <img src="/static/img/hachiko1.jpg">
-                            </a>
                             {{ row.summary }}
                         </div>
                         <div class="footers">
-                            <a href="#">
+                            <a href="/{{ blog.site }}.html">
                                 <i class="fa fa-user-o" aria-hidden="true"></i>
                                 <span>{{ row.blog.user.nickname }}</span>
                             </a>
