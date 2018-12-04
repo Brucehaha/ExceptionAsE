@@ -1,7 +1,59 @@
 .user-info{
     display: inline-block;
 }
+art-comment{
+    margin-top:20px;
+}
+.comment-title ,.comment{
+    display:inline-block;
 
+}
 .reply {
-    display: inline-block;
+    display:inline-block;
+    float:right;
+}
+.round{
+    border-radius: 50%;
+    height: 80px;
+    width: 80px
+}
+.center{
+    text-align: center;
+    padding:auto;
+    margin:auto;
+}
+.li-item{
+    display:block;
+}
+.motto, .types, .tags, .date{
+    margin-top:10px;
+}
+body, html{
+    background-color: #e9ebee;
+}
+.submit{
+    color:white!important;
+    float:right;
+    margin-top: 10px;
+}
+.body-menu{
+}
+.content, .article-content, .article-sum {
+    background-color:#dee2e6;
+    padding: 10px;
+}
+comment-item .content{
+    background-color:#dee2e6;
+    padding: 2px;
+}
+
+.notice{
+    border: 1px solid #dee2e6;
+    padding: 10px;
+}
+.body-menu{
+    margin-top:20px;
+}
+.motto{
+    text-align:center;
 }

@@ -33,7 +33,7 @@
                     <input type="text" class="form-control" name="check_code" id="check_code" placeholder="Code">
                 </div>
                  <div class="col-5">
-                     <img id="change-img" src="/check_code.html" >
+                     <img id="change-img" src="/account/check_code.html" >
                  </div>
              </div>
       </div>
@@ -78,7 +78,7 @@
             $msg.parent().addClass('hide')
             $msg.empty(0)
             $.ajax({
-                url:'/login.html',
+                url:'/account/login.html',
                 type:'POST',
                 data:$('#fm').serialize(),
                 dataType:'JSON',

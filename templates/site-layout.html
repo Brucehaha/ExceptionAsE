@@ -12,14 +12,17 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-info">
- <div class="container">
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg ">
+ <div class="container  text-light">
   <a class="navbar-brand" href="#">{{ blog.title }}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
         {% if request.session.user_info %}
             <li class="nav-item">
                 <a class="nav-link" href="/backend/index.html">{{ request.session.user_info.nickname }}</a>
@@ -27,7 +30,7 @@
             {% if  request.session.user_info.blog__site %}
                 <li class="nav-item">
                     <a  class="nav-link" href="/{{ request.session.user_info.blog__site }}.html">
-                        My Blog
+                        Me
                     </a>
 
                 </li>
@@ -37,7 +40,7 @@
             <li class="nav-item"><a class="nav-link" href="/logout.html">Logout</a></li>
              {% else %}
             <li class="nav-item"><a class="nav-link" href="/login.html">Login</a></li>
-            <li class="nav-item" style="margin:auto">|<</li>
+            <li class="nav-item" style="margin:auto">|</li>
             <li class="nav-item"><a class="nav-link" href="/register.html">Register</a></li>
         {% endif %}
     </ul>
@@ -45,24 +48,22 @@
  </div>
 </nav>
 
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-3 my-widget">
+<div class="container my-content">
+    <div class="row ">
+        <div class="col-md-3">
             <div class="body-menu">
             <div class="notice">
-                <div class="notice-body">
-                    <div>
-                        <div><img class="img-thumbnail" src="/static/img/hachiko1.jpg"></div>
-                        <div>User:{{ blog.user.nickname }}</div>
-                        <div>Followed:{{ blog.user.fans.count }}</div>
-                        <div>Following:{{ blog.user.f.count }}</div>
-                        <div>Email: {{ blog.user.email }}</div>
-                    </div>
-                    <div class="motto">
-                        When you are able to love yourself deeply, you can be kind to others.
-                    </div>
+                <div class="center"><img class="round" src="/static/img/hachiko1.jpg"></div>
+                <div class="center">
+                    <span class="li-item">{{ blog.user.nickname }}</span>
+                    <span class="li-item">Followed: {{ blog.user.fans.count }}</span>
+                    <span class="li-item">Following: {{ blog.user.f.count }}</span>
+                </div>
+                <div class="motto">
+                    When you are able to love yourself deeply, you can be kind to others.
                 </div>
             </div>
+
             <div class="tags">
                 <div class="tags-header">Tag</div>
                 <div class="tags-body">
@@ -96,15 +97,16 @@
             </div>
         </div>
          </div>
-        <div class="col-md-9 my-content">
+        <div class="col-md-9">
             {% block content %}
             {% endblock %}
         </div>
     </div>
 </div>
-{% block js %}{% endblock %}
+
 
 </body>
 <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
-    <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+{% block js %}{% endblock %}
 </html>

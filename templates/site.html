@@ -5,8 +5,8 @@
             <div class="article-list">
                 {% for row in article_list %}
                     <div class="article-item clearfix">
-                        <h3><a href="#">{{ row.title }}</a></h3>
-                        <div class="clearfix">
+                        <h3><a href="/{{ row.blog.site }}/{{ row.nid }}.html">{{ row.title }}</a></h3>
+                        <div class="clearfix ">
                             {{ row.summary }}
                         </div>
                         <div class="footers">

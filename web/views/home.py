@@ -1,6 +1,7 @@
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, HttpResponse
 from utils.pager import Pagination
 from repository import models
+import json
 
 
 def index(request, *args, **kwargs):
@@ -87,28 +88,47 @@ def filter(request, site, condition, val):
     }
     return render(request, 'site.html', data)
 
+
 def ArticleDetail(request, site, nid):
     """
-
     :param request:
     :param site:
     :param nid:
     :return:
     """
+    base_url = "%s.html" % nid
     blog = models.Blog.objects.filter(site=site).select_related('user').first()
     tag_list = models.Tag.objects.filter(blog=blog)
     date_list = models.Article.objects.raw(
         'select nid, count(nid) as num,strftime("%Y-%m",create_time) as ctime from repository_article group by strftime("%Y-%m",create_time)')
-
     article = models.Article.objects.filter(blog=blog, nid=nid).select_related('category', 'articledetail').first()
-    comment_list = models.Comment.objects.filter(article=article).select_related('reply')
     category_list = models.Category.objects.filter(blog=blog)
+    comments_count =models.Comment.objects.filter(article=article).count()
+    page_obj = Pagination(total_count=comments_count,
+                          item_no=4,
+                          current_page=request.GET.get('p'),
+                          url=base_url)
+
+    comment_list = models.Comment.objects.filter(article=article).select_related('reply')[page_obj.start:page_obj.end]
+
     data = {
         'blog': blog,
         'article': article,
         'comment_list': comment_list,
+        'page_obj': page_obj,
         'tag_list': tag_list,
         'category_list': category_list,
         'date_list': date_list,
     }
     return render(request, 'article_detail.html', data)
+
+
+def reply_comment(request):
+    user_id = request.session.get('user_info')['nid']
+    print(user_id)
+    content= request.POST.get('content')
+    print(content)
+    article_id = int(request.POST.get('articleID'))
+    print(article_id)
+    models.Comment.objects.create(user_id=user_id, article_id=article_id, content=content)
+    return HttpResponse(json.dumps("thanks"))
