@@ -13,7 +13,6 @@
 <body>
 
 <nav class="navbar navbar-dark bg-dark navbar-expand-lg ">
- <div class="container  text-light">
   <a class="navbar-brand" href="#">{{ blog.title }}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -45,64 +44,60 @@
         {% endif %}
     </ul>
   </div>
- </div>
 </nav>
 
-<div class="container my-content">
-    <div class="row ">
-        <div class="col-md-3">
-            <div class="body-menu">
-            <div class="notice">
-                <div class="center"><img class="round" src="/static/img/hachiko1.jpg"></div>
-                <div class="center">
-                    <span class="li-item">{{ blog.user.nickname }}</span>
-                    <span class="li-item">Followed: {{ blog.user.fans.count }}</span>
-                    <span class="li-item">Following: {{ blog.user.f.count }}</span>
-                </div>
-                <div class="motto">
-                    When you are able to love yourself deeply, you can be kind to others.
-                </div>
-            </div>
+<section class="container my-content">
+    <section class="row ">
+        <aside class="col-md-3 body-menu">
+                <header class="notice">
+                    <section class="center"><img class="round" src="/static/img/hachiko1.jpg"></section>
+                    <section class="center">
+                        <span class="li-item">{{ blog.user.nickname }}</span>
+                        <span class="li-item">Followed: {{ blog.user.fans.count }}</span>
+                        <span class="li-item">Following: {{ blog.user.f.count }}</span>
+                    </section>
+                    <section class="motto">
+                        When you are able to love yourself deeply, you can be kind to others.
+                    </section>
+                </header>
+                <section class="tags">
+                    <header class="tags-header">Tag</header>
+                    <nav class="tags-body">
+                        <ul>
+                            {% for tag in tag_list %}
+                                <li><a href="/{{ blog.site }}/tag/{{ tag.nid }}.html">{{ tag.title }}({{ tag.article_set.count }})</a></li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </section>
+                <section class="types">
+                    <header class="types-header">Category</header>
+                    <nav class="types-body">
+                        <ul>
+                            {% for tag in category_list %}
+                                <li><a href="/{{ blog.site }}/category/{{ tag.nid }}.html">{{ tag.title }}({{ tag.article_set.count }})</a></li>
+                            {% endfor %}
+                        </ul>
 
-            <div class="tags">
-                <div class="tags-header">Tag</div>
-                <div class="tags-body">
-                    <ul>
-                        {% for tag in tag_list %}
-                            <li><a href="/{{ blog.site }}/tag/{{ tag.nid }}.html">{{ tag.title }}({{ tag.article_set.count }})</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-            <div class="types">
-                <div class="types-header">Category</div>
-                <div class="types-body">
-                    <ul>
-                        {% for tag in category_list %}
-                            <li><a href="/{{ blog.site }}/category/{{ tag.nid }}.html">{{ tag.title }}({{ tag.article_set.count }})</a></li>
-                        {% endfor %}
-                    </ul>
-
-                </div>
-            </div>
-            <div class="dates">
-                <div class="dates-header">Timeline</div>
-                <div class="dates-body">
-                    <ul>
-                        {% for tag in date_list %}
-                            <li><a href="/{{ blog.site }}/date/{{ tag.ctime }}.html">{{ tag.ctime}}({{ tag.num}})</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-         </div>
-        <div class="col-md-9">
+                    </nav>
+                </section>
+                <section class="dates">
+                    <header class="dates-header">Timeline</header>
+                    <nav class="dates-body">
+                        <ul>
+                            {% for tag in date_list %}
+                                <li><a href="/{{ blog.site }}/date/{{ tag.ctime }}.html">{{ tag.ctime}}({{ tag.num}})</a></li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </section>
+        </aside>
+        <main class="col-md-9">
             {% block content %}
             {% endblock %}
-        </div>
-    </div>
-</div>
+        </main>
+    </section>
+</section>
 
 
 </body>

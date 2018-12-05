@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        body{
+            margin:0;
+            padding:0;
+        }
+        .header {
+            min-width:800px;
+            overflow: visible;
+            height:68px;
+            line-height: 68px;
+            background: #10707f;
+            color: white;
+
+        }
+        .header .logo {
+            background: #0c5460;
+            height:68px;
+            width: 200px;
+            font-size:28px;
+            overflow: hidden;
+            text-align: center;
+            display:inline;
+        }
+        .header .menu a{
+            display:inline-block;
+            padding:0 15px;
+            font-size:18px;
+            text-decoration:none;
+
+
+        }
+        .header .menu a:hover {
+            background-color:#0c5460;
+
+        }
+         .header .menu .profile img{
+             border-radius:50%;
+             width: 38px;
+             vertical-align:unset;
+             margin-top:15px;
+
+        }
+         .profile {
+             position:relative;
+             display: inline-block;
+
+         }
+         .sub-menu {
+             background-color: #10707f;
+             position: absolute;
+             width:150px;
+             overflow:hidden;
+             line-height:40px;
+             display:none;
+
+
+
+         }
+          .header .profile:hover .sub-menu {
+              display: block;
+          }
+         .sub-menu a {
+             color: white;
+             width:100%;
+             vertical-align:middle;
+
+
+
+         }
+         .profile .sub-menu {
+            right: 30px;
+            top: 69px;
+         }
+
+         .profile>.nav-item {
+             height:68px;
+         }
+        .left {
+            float:left;
+        }
+        .right{
+            float:right;
+        }
+        aside{
+            width:200px;
+            background: red;
+            position: absolute;
+            top:68px;
+            bottom:0;
+        }
+        main {
+            background-color: yellow;
+            position: absolute;
+            left:205px;
+            top:68px;
+            bottom:0;
+            right:0;
+            overflow: scroll;
+            min-width:595px;
+
+        }
+        .content {
+            height:2000px;
+        }
+
+    </style>
+</head>
+<body>
+<header class="header">
+    <section class="logo left">
+        <a class="nav-item">ExceptionAsE</a>
+    </section>
+    <nav class="menu left">
+        <a class="nav-item">Home</a>
+
+    </nav>
+    <nav class=" menu right">
+        <a class="nav-item">
+            NEWS
+            <i class="fa fa-commenting-o" aria-hidden="true"></i>
+            <span class="badge bg-success">2</span>
+
+        </a>
+        <a class="nav-item">
+            NOTICE
+            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+            <span class="badge bg-success">2</span>
+        </a>
+         <a class="nav-item">
+             TASK
+            <i class="fa fa-bell-o" aria-hidden="true"></i>
+             <span class="badge bg-danger">4</span>
+         </a>
+        <div class="profile right">
+            <a class="nav-item">
+                <img src="/static/img/backend/photo.jpg">
+            </a>
+            <div class="sub-menu">
+                <a href="#">menu1</a>
+                <a href="#">menu1</a>
+                <a href="#">menu1</a>
+
+            </div>
+        </div>
+
+    </nav>
+</header>
+<aside>
+    <nav>
+
+    </nav>
+</aside>
+<main>
+    <section class="content">
+
+    </section>
+</main>
+<footer>
+
+</footer>
+</body>
+</html>
