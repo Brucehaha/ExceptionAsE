@@ -1,0 +1,123 @@
+{% extends 'backend/backend_layout.html' %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/backend/backend-article.css">
+
+{% endblock %}
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb" style="margin-bottom: 0;">
+        <li class="breadcrumb-item"><a href="#">ARTICLE</a></li>
+        <li class="breadcrumb-item active" aria-current="page">LIST</li>
+      </ol>
+    </nav>
+
+    <section style="border: 1px dashed #dddddd;padding: 8px;border-left: 3px solid #337ab7;">
+        <i class="fa fa-search" aria-hidden="true"></i> SEARCH CONDITIONS
+    </section>
+
+    <nav style="padding: 10px">
+        <section class="conditions row " style="margin: 0;padding: 8px 0;">
+            <div class="col-xs-1" style="text-align: right">
+                {% if not conditions.category_id  %}
+                    <a class="active" href="{% url 'backend_articles' category_id=0 type_id=conditions.type_id|default:0 %}"> All</a>
+                {% else %}
+                    <a href="{% url 'backend_articles' category_id=0 type_id=conditions.type_id|default:0 %}"> All</a>
+
+                {% endif %}
+            </div>
+            <div class="col-xs-11">
+                {% for c in category_list %}
+                    {% if conditions.category_id == c.nid  %}
+                        <a class="active" href="{% url 'backend_articles' category_id=c.nid type_id=conditions.type_id|default:0 %}">
+                            {{ c.title }}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'backend_articles' category_id=c.nid type_id=conditions.type_id|default:0 %}">
+                            {{ c.title }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+
+            </div>
+        </section>
+        <section class="conditions row " style="margin: 0;padding: 8px 0;">
+            <div class="col-xs-1" style="text-align: right">
+                {% if not conditions.type_id  %}
+                <a class="active" href="{% url 'backend_articles' category_id=conditions.category_id|default:0 type_id=0 %}">
+                All
+                </a>
+                {% else %}
+                <a
+                    href="{% url 'backend_articles' category_id=conditions.category_id|default:0 type_id=0 %}">
+                All
+                </a>
+
+                {% endif %}
+            </div>
+            <div class="col-xs-11">
+                {% for c in type_list %}
+                    {% if conditions.type_id == c.0  %}
+                        <a class="active" href="{% url 'backend_articles' category_id=conditions.category_id|default:0 type_id=c.0 %}">
+                            {{ c.1 }}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'backend_articles' category_id=conditions.category_id|default:0 type_id=c.0 %}">
+                            {{ c.1 }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+    </nav>
+    <section
+         style="height: 36px;line-height: 35px;padding: 0 15px;border-top: 1px solid #dddddd;background-color: #f1f0f0">
+        <i class="fa fa-table" aria-hidden="true"></i>
+        SEARCH RESULT({{ data_count }} ARTICLES)
+        <a target="_blank" href="/backend/add-article.html" class="right"
+           style="display: inline-block;padding:0 10px;background-color: #428bca;color: #ffffff;">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            NEW ARTICLE
+        </a>
+    </section>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ARTICLE TITLE</th>
+            <th>ACTION</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in articles %}
+            <tr nid="{{ row.nid }}">
+                <td><a href="/{{ row.blog.site }}/{{ row.nid }}.html">{{ row.title }}</a></td>
+                <td>
+                    <a class="btn btn-danger btn-sm"  href="">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        DELETE
+                    </a>
+                    |
+                    <a class="btn btn-primary btn-sm" href="/backend/edit-article-{{ row.nid }}.html">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        EDIT
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+        <div class="clearfix">
+            <ul class="pagination right" style="margin-top: 0">
+            </ul>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

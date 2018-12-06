@@ -19,7 +19,7 @@ def index(request, *args, **kwargs):
                           url=base_url)
     article_list = models.Article. \
                           objects. \
-                          filter(**kwargs)[page_obj.start:page_obj.end]
+                          filter(**kwargs).order_by('-nid')[page_obj.start:page_obj.end]
 
     data = {
         'article_list': article_list,
@@ -42,7 +42,7 @@ def site(request, *args, **kwargs):
     blog_site = kwargs.get('site')
     blog = models.Blog.objects.filter(site=blog_site).select_related('user').first()
     category_list = models.Category.objects.filter(blog=blog)
-    article_list = models.Article.objects.filter(blog=blog)
+    article_list = models.Article.objects.filter(blog=blog).order_by('-nid')
     tag_list = models.Tag.objects.filter(blog=blog)
     for x in tag_list:
         print(x.article_set)

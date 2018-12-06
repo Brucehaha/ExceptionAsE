@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/static/css/backend/backend-layout.css">
+
+
+    {% block css %}
+
+    {% endblock %}
+</head>
+<body>
+<header class="header">
+    <section class="logo left">
+        <a class="nav-item">ExceptionAsE</a>
+    </section>
+    <nav class="menu left">
+        <a class="nav-item">Home</a>
+
+    </nav>
+    <nav class=" menu right">
+        <a class="nav-item">
+            NEWS
+            <i class="fa fa-commenting-o" aria-hidden="true"></i>
+            <span class="badge bg-success">2</span>
+
+        </a>
+        <a class="nav-item">
+            NOTICE
+            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+            <span class="badge bg-success">2</span>
+        </a>
+         <a class="nav-item">
+             TASK
+            <i class="fa fa-bell-o" aria-hidden="true"></i>
+             <span class="badge bg-danger">4</span>
+         </a>
+        <div class="profile right">
+            <a class="nav-item">
+                <img src="/static/img/backend/photo.jpg">
+            </a>
+            <div class="sub-menu">
+                <a href="#">menu1</a>
+                <a href="#">menu1</a>
+                <a href="#">menu1</a>
+
+            </div>
+        </div>
+
+    </nav>
+</header>
+<aside>
+    <nav class="menu">
+        <a class="nav-item" href="/backend/article-0-0.html">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+        <span>Article</span>
+        </a>
+        <a class="nav-item" href="/backend/category.html">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>Category</span>
+        </a>
+        <a class="nav-item" href="/backend/tag.html">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>Tag</span>
+        </a>
+        <a class="nav-item" href="/backend/base-info.html">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>Account</span>
+        </a>
+    </nav>
+</aside>
+<main >
+    <section class="content">
+    {% block content %}
+    {% endblock %}
+    </section>
+
+</main>
+<footer>
+
+</footer>
+</body>
+    {% block js %}
+    {% endblock %}
+<script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+</html>

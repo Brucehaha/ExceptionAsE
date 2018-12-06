@@ -1,0 +1,113 @@
+/*layout for backend_layout.html*/
+body{
+    margin:0;
+    padding:0;
+}
+.header {
+    min-width:800px;
+    overflow: visible;
+    height:68px;
+    line-height: 68px;
+    background: #10707f;
+    color: white;
+
+}
+.header .logo {
+    background: #0c5460;
+    height:68px;
+    width: 200px;
+    font-size:28px;
+    overflow: hidden;
+    text-align: center;
+    display:inline;
+}
+.header .menu a{
+    display:inline-block;
+    padding:0 15px;
+    font-size:18px;
+    text-decoration:none;
+
+
+}
+.header .menu a:hover {
+    background-color:#0c5460;
+
+}
+ .header .menu .profile img{
+     border-radius:50%;
+     width: 38px;
+     vertical-align:unset;
+     margin-top:15px;
+
+}
+ .profile {
+     position:relative;
+     display: inline-block;
+
+ }
+ .sub-menu {
+     background-color: #10707f;
+     position: absolute;
+     width:150px;
+     overflow:hidden;
+     line-height:40px;
+     display:none;
+
+
+
+ }
+  .header .profile:hover .sub-menu {
+      display: block;
+  }
+ .sub-menu a {
+     color: white;
+     width:100%;
+     vertical-align:middle;
+
+
+
+ }
+ .profile .sub-menu {
+    right: 30px;
+    top: 69px;
+     z-index: 1;
+ }
+
+ .profile>.nav-item {
+     height:68px;
+ }
+.left {
+    float:left;
+}
+.right{
+    float:right;
+}
+aside{
+    width:200px;
+    position: absolute;
+    top:73px;
+    bottom:0;
+    border: 1px solid  #dddddd;
+}
+main {
+    position: absolute;
+    left:205px;
+    top:73px;
+    bottom:0;
+    right:0;
+    overflow: scroll;
+    min-width:595px;
+    border: 1px solid #dddddd;
+
+}
+.content {
+    height:2000px;
+}
+aside .menu .nav-item {
+    display:block;
+    padding:8px 8px;
+    border-bottom: 1px dashed #dddddd;
+    text-decoration: none;
+
+}
+

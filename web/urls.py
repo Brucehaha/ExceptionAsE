@@ -11,6 +11,6 @@ urlpatterns = [
     re_path(r'^(?P<site>\w+)/(?P<nid>\d+).html$', home.ArticleDetail, name='article'),
     re_path(r'^(?P<site>\w+)/(?P<condition>(tag)|(category)|(date))/(?P<val>\w+-*\w*).html$', home.filter),
     re_path(r'^(?P<site>\w+).html$', home.site),
-    re_path(r'^', home.index),
+    re_path(r'^$', home.index),
 
 ]
