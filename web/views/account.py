@@ -13,6 +13,10 @@ def check_code(request):
     request.session['recapcha_code']=code
     return HttpResponse(bcache.getvalue())
 
+def logout(request):
+    request.session.clear()
+    return redirect('/')
+
 
 def login(request):
     """

@@ -73,7 +73,7 @@
     </nav>
 </aside>
 <main >
-    <section class="content">
+    <section class="content" >
     {% block content %}
     {% endblock %}
     </section>
@@ -83,8 +83,9 @@
 
 </footer>
 </body>
-    {% block js %}
-    {% endblock %}
 <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    {% block js %}
+    {% endblock %}
+
 </html>

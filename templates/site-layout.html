@@ -36,11 +36,11 @@
             {% endif %}
             <li class="nav-item"><a class="nav-link" href="/backend/index.html">Manage</a></li>
             <li class="nav-item" style="margin:auto"><a >|</a></li>
-            <li class="nav-item"><a class="nav-link" href="/logout.html">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
              {% else %}
-            <li class="nav-item"><a class="nav-link" href="/login.html">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
             <li class="nav-item" style="margin:auto">|</li>
-            <li class="nav-item"><a class="nav-link" href="/register.html">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
         {% endif %}
     </ul>
   </div>

@@ -5,7 +5,10 @@ from web.views import account
 
 urlpatterns = [
     re_path(r'^json/reply-comment$', home.reply_comment),
-    re_path(r'^account/login.html$', account.login),
+    re_path(r'^account/logout.html$', account.logout, name='logout'),
+    re_path(r'^account/login.html$', account.login, name='login'),
+    re_path(r'^account/login.html$', account.login, name='register'),
+
     re_path(r'^account/check_code.html$', account.check_code),
     re_path(r'^all/(?P<type_id>\d+).html', home.index, name='index'),
     re_path(r'^(?P<site>\w+)/(?P<nid>\d+).html$', home.ArticleDetail, name='article'),

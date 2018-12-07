@@ -89,19 +89,20 @@ aside{
     bottom:0;
     border: 1px solid  #dddddd;
 }
+
 main {
     position: absolute;
     left:205px;
     top:73px;
     bottom:0;
     right:0;
-    overflow: scroll;
+    overflow:auto;
     min-width:595px;
     border: 1px solid #dddddd;
 
 }
 .content {
-    height:2000px;
+ with:100%;
 }
 aside .menu .nav-item {
     display:block;

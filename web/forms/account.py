@@ -15,7 +15,7 @@ class LoginForm(MyBaseForm):
 
     def clean_check_code(self):
         session_code = self.request.session.get('recapcha_code').upper()
-        post_code = self.cleaned_data['check_code']
+        post_code = self.cleaned_data['check_code'].upper()
         print('test', post_code)
         if session_code != post_code:
             raise ValidationError(message="invalid code", code='invalid')
