@@ -1,0 +1,42 @@
+{% extends 'backend/backend_layout.html' %}
+{% block css %}
+<style>
+.form-radio{
+    list-style: none;
+}
+.form-radio li{
+    display:inline-block;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb" style="margin-bottom: 0;">
+        <li class="breadcrumb-item"><a href="#">ARTICLE</a></li>
+        <li class="breadcrumb-item active" aria-current="page">NEW</li>
+      </ol>
+    </nav>
+    <section style="padding:20px;">
+        <form action="add-article.html" method="POST" novalidate >
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+        </form>
+    </section>
+
+
+
+{% endblock %}
+
+{% block js %}
+    <script charset="utf-8" src="/static/plugins/kindeditor/kindeditor-all-min.js"></script>
+    <script charset="utf-8" src="/static/plugins/kindeditor/lang/en.js"></script>
+    <script>
+    KindEditor.ready(function (K) {
+        var editor = K.create('textarea[name="content"]', {
+            resizeType: 1
+        });
+    });
+</script>
+{% endblock %}

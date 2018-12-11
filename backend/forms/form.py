@@ -16,20 +16,21 @@ class ArticleForm(Form):
         widget=widgets.Textarea(attrs={'class': 'kind-editor'})
     )
     type_id = fields.IntegerField(
-        widget=widgets.RadioSelect(choices=models.Article.type_choices)
+        widget=widgets.RadioSelect(choices=models.Article.type_choices, attrs={'class': "form-radio"}),
+        label="Type"
     )
     category_id = fields.ChoiceField(
         choices=[],
-        widget=widgets.RadioSelect()
+        widget=widgets.RadioSelect(attrs={'class': "form-radio"}),
+        label="Category",
     )
     tags = fields.MultipleChoiceField(
         choices=[],
-        widget=widgets.CheckboxSelectMultiple
+        widget=widgets.CheckboxSelectMultiple(attrs={'class': "form-radio"})
     )
 
     def __init__(self, request, *args, **kwargs):
         super(ArticleForm, self).__init__(*args, **kwargs)
         blog_id = request.session['user_info']['blog__nid']
-        print("oK:",  models.Category.objects.filter(blog_id=blog_id).values_list('nid', 'title'))
         self.fields['category_id'].choices = models.Category.objects.filter(blog_id=blog_id).values_list('nid', 'title')
         self.fields['tags'].choices = models.Tag.objects.filter(blog_id=blog_id).values_list('nid', 'title')
