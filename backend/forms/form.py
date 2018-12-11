@@ -13,7 +13,7 @@ class ArticleForm(Form):
         widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': 'SUMMARY'})
     )
     content = fields.CharField(
-        widget=widgets.Textarea(attrs={'class': 'kind-editor'})
+        widget=widgets.Textarea(attrs={'id': 'kind-editor'})
     )
     type_id = fields.IntegerField(
         widget=widgets.RadioSelect(choices=models.Article.type_choices, attrs={'class': "form-radio"}),

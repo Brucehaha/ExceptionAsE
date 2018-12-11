@@ -39,6 +39,22 @@ def site(request, *args, **kwargs):
     :param kwargs: blog
     :return:
     """
+    from django.db import connection, transaction
+    cursor = connection.cursor()
+
+    # # Data modifying operation - commit required
+    # cursor.execute(
+    #     '''
+    #     select
+    #     count(nid) as num,
+    #     strftime("%Y-%m", create_time) as id
+    #     from repository_article
+    #     group by strftime("%Y-%m",create_time)
+    #     ''')
+    # row=cursor.fetchall()
+    #
+
+
     blog_site = kwargs.get('site')
     blog = models.Blog.objects.filter(site=blog_site).select_related('user').first()
     category_list = models.Category.objects.filter(blog=blog)
@@ -46,8 +62,16 @@ def site(request, *args, **kwargs):
     tag_list = models.Tag.objects.filter(blog=blog)
     for x in tag_list:
         print(x.article_set)
+    # in django need id, otherwise will get erro
     date_list =models.Article.objects.raw(
-        'select nid, count(nid) as num, strftime("%Y-%m", create_time) as ctime from repository_article'
+        '''
+        select
+        nid,
+        count(nid) as num,
+        strftime("%Y-%m", create_time) as id
+        from repository_article
+        group by strftime("%Y-%m",create_time)
+        '''
     )
 
     data = {
@@ -65,7 +89,14 @@ def filter(request, site, condition, val):
     category_list = models.Category.objects.filter(blog=blog)
     tag_list = models.Tag.objects.filter(blog=blog)
     date_list =models.Article.objects.raw(
-        'select nid, count(nid) as num, strftime("%Y-%m", create_time) as ctime from repository_article'
+        '''
+        select
+        nid,
+        count(nid) as num, 
+        strftime("%Y-%m", create_time) as ctime
+        from repository_article 
+        group by strftime("%Y-%m",create_time)
+        '''
     )
 
     if condition == "category":
@@ -100,7 +131,15 @@ def ArticleDetail(request, site, nid):
     blog = models.Blog.objects.filter(site=site).select_related('user').first()
     tag_list = models.Tag.objects.filter(blog=blog)
     date_list = models.Article.objects.raw(
-        'select nid, count(nid) as num,strftime("%Y-%m",create_time) as ctime from repository_article group by strftime("%Y-%m",create_time)')
+        '''
+        select
+        nid,
+        count(nid) as num,
+        strftime("%Y-%m",create_time) as ctime
+        from repository_article 
+        group by strftime("%Y-%m",create_time)
+        '''
+    )
     article = models.Article.objects.filter(blog=blog, nid=nid).select_related('category', 'articledetail').first()
     category_list = models.Category.objects.filter(blog=blog)
     comments_count =models.Comment.objects.filter(article=article).count()

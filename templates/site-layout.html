@@ -85,8 +85,9 @@
                     <header class="dates-header">Timeline</header>
                     <nav class="dates-body">
                         <ul>
+
                             {% for tag in date_list %}
-                                <li><a href="/{{ blog.site }}/date/{{ tag.ctime }}.html">{{ tag.ctime}}({{ tag.num}})</a></li>
+                                <li><a href="/{{ blog.site }}/date/{{ tag.ctime }}.html">{{ tag.ctime }}({{ tag.num}}) </a></li>
                             {% endfor %}
                         </ul>
                     </nav>

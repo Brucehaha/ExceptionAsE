@@ -82,9 +82,15 @@ def add_article(request):
             return redirect("/account/login.html")
 
 
-def edit_article(request):
+def edit_article(request, article_id):
     """
     eidit arthcle
     :param request:
     :return:
     """
+    article_obj = models.Article.objects.filter(nid=article_id).first()
+    tags = article_obj.tags.values_list('nid')
+    print(list(zip(*tags)))
+    print(article_obj.nid)
+    return
+

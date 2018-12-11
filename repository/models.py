@@ -123,6 +123,7 @@ class Tag(models.Model):
     def __str__(self):
         return self.title
 
+
 class UpDown(models.Model):
     article = models.ForeignKey(to='Article', to_field='nid', on_delete=models.CASCADE)
     user = models.ForeignKey(to='Userinfo', to_field='nid', on_delete=models.CASCADE)

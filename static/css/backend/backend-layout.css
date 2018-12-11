@@ -112,3 +112,9 @@ aside .menu .nav-item {
 
 }
 
+.form-radio{
+    list-style: none;
+}
+.form-radio li{
+    display:inline-block;
+}
