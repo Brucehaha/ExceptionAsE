@@ -11,6 +11,8 @@ admin.site.register(models.UserFans)
 admin.site.register(models.Comment)
 admin.site.register(models.Tag)
 admin.site.register(models.Article2Tag)
+admin.site.register(models.eTicket)
+admin.site.register(models.eTicketContent)
 
 
 

@@ -26,6 +26,7 @@ class ArticleForm(Form):
     )
     tags = fields.MultipleChoiceField(
         choices=[],
+        required=False,
         widget=widgets.CheckboxSelectMultiple(attrs={'class': "form-radio"})
     )
 
@@ -34,3 +35,12 @@ class ArticleForm(Form):
         blog_id = request.session['user_info']['blog__nid']
         self.fields['category_id'].choices = models.Category.objects.filter(blog_id=blog_id).values_list('nid', 'title')
         self.fields['tags'].choices = models.Tag.objects.filter(blog_id=blog_id).values_list('nid', 'title')
+
+
+class eTicketForm(Form):
+    subject = fields.CharField(
+        widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': 'subject'})
+    )
+    content = fields.CharField(
+        widget=widgets.Textarea(attrs={'class': 'form-control'})
+    )

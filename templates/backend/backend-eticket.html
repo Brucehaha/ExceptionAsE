@@ -1,0 +1,64 @@
+{% extends 'backend/backend_layout.html' %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/backend/backend-article.css">
+
+{% endblock %}
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb" style="margin-bottom: 0;">
+        <li class="breadcrumb-item"><a href="#">eTicket</a></li>
+        <li class="breadcrumb-item active" aria-current="page">LIST</li>
+      </ol>
+    </nav>
+    <section
+         style="height: 36px;line-height: 35px;padding: 0 15px;border-top: 1px solid #dddddd;background-color: #f1f0f0">
+        <i class="fa fa-table" aria-hidden="true"></i>
+        <a target="_blank" href="/backend/add-article.html" class="right"
+           style="display: inline-block;padding:0 10px;background-color: #428bca;color: #ffffff;">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            NEW ARTICLE
+        </a>
+    </section>
+    <table class="table table-bordered" >
+            <thead>
+            <tr>
+                <th>eTicket ID</th>
+                <th>Subject</th>
+                <th>Status</th>
+                <th>Action</th>
+
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in etickets %}
+                <tr nid="{{ row.nid }}">
+                    <td><a href="/backend/{{ row.nid }}.html">{{ row.subject }}</a></td>
+                    <td>
+                        <a class="btn btn-danger btn-sm"  href="">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                            DELETE
+                        </a>
+                        |
+                        <a class="btn btn-primary btn-sm" href="/backend/edit-article-{{ row.nid }}.html">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            EDIT
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    <section class="clearfix">
+        <ul class="pagination right" style="margin-top: 0">
+            {{ pager.pages }}
+        </ul>
+    </section>
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
