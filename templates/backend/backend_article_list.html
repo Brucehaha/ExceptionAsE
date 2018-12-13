@@ -11,7 +11,7 @@
         <li class="breadcrumb-item active" aria-current="page">LIST</li>
       </ol>
     </nav>
-    <section style="border: 1px dashed #dddddd;padding: 8px;border-left: 3px solid #337ab7;">
+    <section class="left-border-dash">
         <i class="fa fa-search" aria-hidden="true"></i> SEARCH CONDITIONS
     </section>
     <nav style="padding: 10px">
@@ -69,11 +69,10 @@
             </div>
         </section>
     </nav>
-    <section
-         style="height: 36px;line-height: 35px;padding: 0 15px;border-top: 1px solid #dddddd;background-color: #f1f0f0">
+    <section class="section-header">
         <i class="fa fa-table" aria-hidden="true"></i>
-        SEARCH RESULT({{ data_count }} ARTICLES)
-        <a target="_blank" href="/backend/add-article.html" class="right"
+        SEARCH RESULT({{ articles.count }} ARTICLES)
+        <a target="_blank" href="{% url 'add_article' %}" class="right"
            style="display: inline-block;padding:0 10px;background-color: #428bca;color: #ffffff;">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
             NEW ARTICLE

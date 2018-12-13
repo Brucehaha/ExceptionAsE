@@ -37,7 +37,13 @@ class ArticleForm(Form):
         self.fields['tags'].choices = models.Tag.objects.filter(blog_id=blog_id).values_list('nid', 'title')
 
 
-class eTicketForm(Form):
+class ETicketForm(Form):
+    content = fields.CharField(
+        widget=widgets.Textarea(attrs={'class': 'form-control'})
+    )
+
+
+class ETicketAdd(Form):
     subject = fields.CharField(
         widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': 'subject'})
     )

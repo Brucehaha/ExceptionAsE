@@ -145,24 +145,30 @@ class Comment(models.Model):
 
 
 
-class eTicket(models.Model):
+class ETicket(models.Model):
+
     nid = models.BigAutoField(primary_key=True)
     claimer = models.ForeignKey(to='UserInfo', to_field='nid', related_name="claimer", on_delete=models.CASCADE)
     subject = models.CharField(max_length=32)
     created_time = models.DateTimeField(auto_now_add=True)
     processor = models.ForeignKey(to='Userinfo', to_field='nid', related_name="processor", blank=True, null=True, on_delete=models.SET_NULL)
     status_choices = [
-        (1, 'open'),
-        (2, 'processing'),
-        (3, 'closed'),
+        (0, 'open'),
+        (1, 'processing'),
+        (2, 'closed'),
 
     ]
-    status = models.IntegerField(choices=status_choices, default=1)
+    status = models.IntegerField(choices=status_choices, default=0)
 
 
-class eTicketContent(models.Model):
+class ETicketContent(models.Model):
     content = models.TextField()
-    solution = models.TextField(blank=True, null=True)
-    ticket = models.ForeignKey(to=eTicket, to_field='nid', on_delete=models.CASCADE)
-    modified_date = models.DateTimeField(auto_now=True)
-    is_reply = models.BooleanField(default=False)
+    ticket = models.ForeignKey(to=ETicket, to_field='nid', on_delete=models.CASCADE)
+    created_time = models.DateTimeField(auto_now_add=True)
+
+
+class ETicketSolution(models.Model):
+    content = models.TextField()
+    reply = models.ForeignKey(to=ETicketContent, on_delete=models.CASCADE)
+    created_time = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)

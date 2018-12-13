@@ -118,3 +118,17 @@ aside .menu .nav-item {
 .form-radio li{
     display:inline-block;
 }
+.section-header {
+    height: 36px;
+    line-height: 35px;
+    padding: 0 15px;
+    border-top: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    background-color: #f1f0f0;
+}
+.left-border-dash {
+    border: 1px dashed #dddddd;
+    padding: 8px;
+    border-left: 3px solid #337ab7;
+}

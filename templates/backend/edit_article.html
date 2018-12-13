@@ -6,12 +6,12 @@
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb" style="margin-bottom: 0;">
-        <li class="breadcrumb-item"><a href="#">ARTICLE</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'backend' %}">ARTICLE</a></li>
         <li class="breadcrumb-item active" aria-current="page">NEW</li>
       </ol>
     </nav>
     <section style="padding:20px;">
-        <form action="add-article.html" method="POST" novalidate >
+        <form action="" method="POST" novalidate >
             {% csrf_token %}
             <div class="form-group">
                 <label for="{{ form.title.id_for_label }}">Title</label>

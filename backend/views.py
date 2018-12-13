@@ -1,11 +1,12 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, reverse
 from repository import models
 from utils.pager import Pagination
 from .forms import form
 from django.db import transaction
+from django.db.models import Q
 
 
-def article(request, *args, **kwargs):
+def article_list(request, *args, **kwargs):
     """
     list the articles by conditions
     :param request: user_info
@@ -42,7 +43,7 @@ def article(request, *args, **kwargs):
         'type_list': type_list,
         'pager':pager,
     }
-    return render(request, 'backend/backend_article.html', data)
+    return render(request, 'backend/backend_article_list.html', data)
 
 
 def add_article(request):
@@ -55,7 +56,7 @@ def add_article(request):
     """
     if request.method == "GET":
         form_obj = form.ArticleForm(request=request)
-        return render(request, 'backend/add-article.html', {'form': form_obj})
+        return render(request, 'backend/add_article.html', {'form': form_obj})
     elif request.method == "POST":
         user_info = request.session.get('user_info')
         if user_info:
@@ -76,7 +77,7 @@ def add_article(request):
                     print(e)
                     return HttpResponse("Created Failed")
             else:
-                return render(request, 'backend/add-article.html', {'form': form_obj})
+                return render(request, 'backend/add_article.html', {'form': form_obj})
             return redirect("/backend/index.html")
         else:
             return redirect("/account/login.html")
@@ -111,29 +112,117 @@ def edit_article(request, article_id):
                 return render(request, 'backend/edit_article.html', {'form': instance})
         elif request.method == 'POST':
                 # stop modify other one's article like edit-article-1.hml change to edit-article-2.hml
-                obj = models.Article.objects.filter(nid=article_id, blog_id=blog_id)
+                obj = models.Article.objects.filter(nid=article_id, blog_id=blog_id).first()
                 if not obj:
                     return redirect('/login.html')
                 instance = form.ArticleForm(request=request, data=request.POST)
                 if instance.is_valid():
                     content = instance.cleaned_data.pop('content')
                     tags = instance.cleaned_data.pop('tags')
+                    print(tags)
                     try:
                         with transaction.atomic():
-                            article_obj = models.Article.objects.filter(nid=obj.nid).update(**instance)
-                            models.ArticleDetail.objects.filter(article=article_obj).update(content=content)
-                            models.Article2Tag.objects.filter(article=article_obj).delete()
-                            tag_list = (lambda x: models.Article2Tag(article=article_obj, tag_id=int(x)), tags)
+                            models.Article.objects.filter(nid=obj.nid).update(**instance.cleaned_data)
+                            models.ArticleDetail.objects.filter(article=obj).update(content=content)
+                            models.Article2Tag.objects.filter(article=obj).delete()
+                            tag_list = []
+                            for x in tags:
+                                tag_id = int(x)
+                                tag_list.append(models.Article2Tag(article_id=obj.nid, tag_id=x))
+                            # tag_list = map(lambda x: models.Article2Tag(article=obj, tag_id=x), tags)
                             models.Article2Tag.objects.bulk_create(list(tag_list))
                     except Exception as e:
-                        return HttpResponse('e')
-                    return redirect('/backend.html')
+                        return HttpResponse(e)
+                    return redirect('/backend/index.html')
     else:
         return redirect('/login.html')
 
 
+def eticket_list(request):
+    user_id = request.session.get('user_info')['nid']
+    if user_id:
+        etickets = models.ETicket.objects.filter(claimer_id=user_id)
+        return render(request, 'backend/backend_eticket_list.html', {'etickets': etickets})
+    return redirect('/login.html')
+
+
 def add_eticket(request):
-    if request.method == 'GET':
-        pass
+    """
+    for normal user
+    :param request:
+    :return:
+    """
+    obj = form.ETicketAdd()
+    user_id = request.session.get('user_info')['nid']
+    if request.method == 'POST':
+        obj = form.ETicketAdd(data=request.POST)
+        if obj.is_valid():
+            subject = obj.cleaned_data.get('subject')
+            content = obj.cleaned_data.get('content')
+            data = {
+                'subject': subject,
+                'claimer_id': user_id,
+            }
+            try:
+                with transaction.atomic():
+                    eticket = models.ETicket.objects.create(**data)
+                    print(eticket)
+                    models.ETicketContent.objects.create(content=content, ticket=eticket)
+            except Exception as e:
+                return HttpResponse(e)
+
+            print(reverse('eticket_detail', kwargs={'eticket_id': eticket.nid}))
+            return redirect(reverse('eticket_detail', kwargs={'eticket_id': eticket.nid}))
+    return render(request, 'backend/add_eticket.html', {'form': obj})
+
+
+
+def eticket_detail(request, eticket_id):
+    """
+    edit
+    :param request:
+    :param eticket_id:
+    :return:
+    """
+    user_id = request.session.get('user_info')['nid']
+    form_obj = form.ETicketForm()
+    if user_id:
+        obj = form.ETicketForm()
+        if request.method == "GET":
+            eticket = models.ETicket.objects.filter(nid=eticket_id, claimer_id=user_id).first()
+            return render(request, 'backend/backend_article_detail.html', {'eticket': eticket, 'form':form_obj})
+        if request.method == "POST":
+            eticket = models.ETicket.objects.filter(nid=eticket_id, claimer_id=user_id).first()
+            obj = form_obj(data=request.POST)
+            if obj.is_valid():
+                if eticket:
+                    content = obj.cleaned_data.pop('content')
+                    models.ETicketContent.create(eticket=eticket, content=content)
+                else:
+                    return HttpResponse('FUCK OFF')
+            return redirect('eticket_detail', kwargs={'eticket_id': eticket_id})
+    else:
+        return redirect('/login.html')
+
+
+
+def admin_eticket_list(request):
+    """
+    for admin role only, need to use permission for role to limit the access
+    :param request:
+    :return:
+    """
+    user_id = request.session.get('user_info')['nid']
+    if user_id:
+        eticket_list = models.ETicket.objects.filter(Q(status=0)|Q(processor_id=user_id))
+        return render(request, 'backend/admin_eticket_list.html', {'etickets': eticket_list})
+    return redirect('/login.html')
+
+
+
+
+
+
+
 
 

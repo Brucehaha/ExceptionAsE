@@ -7,17 +7,17 @@
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb" style="margin-bottom: 0;">
-        <li class="breadcrumb-item"><a href="#">eTicket</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'eticket_list' %}">eTicket</a></li>
         <li class="breadcrumb-item active" aria-current="page">LIST</li>
       </ol>
     </nav>
     <section
          style="height: 36px;line-height: 35px;padding: 0 15px;border-top: 1px solid #dddddd;background-color: #f1f0f0">
         <i class="fa fa-table" aria-hidden="true"></i>
-        <a target="_blank" href="/backend/add-article.html" class="right"
+        <a target="_blank" href="{% url 'add_eticket' %}" class="right"
            style="display: inline-block;padding:0 10px;background-color: #428bca;color: #ffffff;">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            NEW ARTICLE
+            NEW ETICKET
         </a>
     </section>
     <table class="table table-bordered" >
@@ -25,25 +25,29 @@
             <tr>
                 <th>eTicket ID</th>
                 <th>Subject</th>
+                <th>Create Time</th>
                 <th>Status</th>
+                 <th> Employee</th>
                 <th>Action</th>
-
-
             </tr>
             </thead>
             <tbody>
             {% for row in etickets %}
                 <tr nid="{{ row.nid }}">
-                    <td><a href="/backend/{{ row.nid }}.html">{{ row.subject }}</a></td>
+                    <td><a href="/backend/eticket-{{ row.nid }}.html">{{ row.nid }}</a></td>
+                    <td><a href="/backend/eticket-{{ row.nid }}.html">{{ row.subject }}</a></td>
+                    <td>{{ row.created_time }}</td>
+                    <td>{{ row.get_status_display }}</td>
+                    <td>{{ row.processor }}</td>
                     <td>
                         <a class="btn btn-danger btn-sm"  href="">
                             <i class="fa fa-times" aria-hidden="true"></i>
-                            DELETE
+                            Close
                         </a>
                         |
-                        <a class="btn btn-primary btn-sm" href="/backend/edit-article-{{ row.nid }}.html">
+                        <a class="btn btn-primary btn-sm" href="{% url 'eticket_detail' eticket_id=row.nid %}">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            EDIT
+                            VIEW
                         </a>
                     </td>
                 </tr>
