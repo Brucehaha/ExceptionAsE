@@ -1,0 +1,64 @@
+{% extends 'backend/backend_layout.html' %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb" style="margin-bottom: 0;">
+        <li class="breadcrumb-item"><a href="{% url 'eticket_list' %}">eTicket</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ eticket.nid }}</li>
+      </ol>
+    </nav>
+   <section style="max-width:1000px;margin:auto;padding:auto">
+       <header style="padding:10px;"><h2>{{ eticket.subject }}</h2></header>
+
+       {% for row in eticket.eticketreply_set.all %}
+           <div>
+
+                    </div>
+                       <div class="section-header">
+                            <b>{{ row.user }}</b>
+                            <span class="right">
+                                {{ row.created_time }}
+                            </span>
+
+                       </div>
+
+                       <div class="left-border-dash">{{ row.content|safe }}</div>
+
+           </div>
+
+       {% endfor %}
+        <div class="section-header">
+            <b>Reply</b>
+
+        </div>
+        <form action="" method="post" novalidate="True">
+
+                {% csrf_token %}
+
+                    <div class="form-group">
+                    {{ form.content }}
+                    </div>
+            <button class="btn btn-primary btn-lg">Submit</button>
+        </form>
+
+
+   </section>
+
+
+
+{% endblock %}
+{% block js %}
+    <script charset="utf-8" src="/static/plugins/kindeditor/kindeditor-all-min.js"></script>
+    <script charset="utf-8" src="/static/plugins/kindeditor/lang/en.js"></script>
+    <script>
+    KindEditor.ready(function (K) {
+        var editor = K.create('textarea[name="content"]', {
+            resizeType: 1,
+            width:'100%',
+        });
+    });
+</script>
+{% endblock %}

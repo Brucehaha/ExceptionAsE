@@ -11,7 +11,7 @@
       </ol>
     </nav>
     <section style="padding:20px;">
-        <form  method="POST" novalidate >
+        <form  method="post" novalidate="True" >
             {% csrf_token %}
             <div class="form-group">
                 <label for="{{ form.subject.id_for_label }}">Title</label>

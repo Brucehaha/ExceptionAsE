@@ -41,9 +41,9 @@
                     <td>{{ row.processor }}</td>
                     <td>
                         {% if not row.processor %}
-                            <a class="btn btn-info btn-sm"  href="">
+                            <a class="btn btn-info btn-sm"  href="{% url 'snatch' nid=row.nid %}">
                             <i class="fa fa-clock-o" aria-hidden="true"></i>
-                            Get it!
+                            Snatch it!
                         </a>
                             |
                         {% endif %}
@@ -53,10 +53,11 @@
                             <i class="fa fa-times" aria-hidden="true"></i>
                             Close
                         </a>
+                        |
                         {% endif %}
 
-                        |
-                        <a class="btn btn-primary btn-sm" href="{% url 'eticket_detail' eticket_id=row.nid %}">
+
+                        <a class="btn btn-primary btn-sm" href="{% url 'admin_eticket_detail' eticket_id=row.nid %}">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             VIEW
                         </a>

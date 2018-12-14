@@ -13,33 +13,31 @@
    <section style="max-width:1000px;margin:auto;padding:auto">
        <header style="padding:10px;"><h2>{{ eticket.subject }}</h2></header>
 
-       {% for row in eticket.eticketcontent_set.all %}
+       {% for row in eticket.eticketreply_set.all %}
            <div>
-                    <div class="section-header">
-                        <b>Question</b>
-                        <span class="right">{{ row.created_time }} <b>{{ eticket.claimer }}</b></span>
+
                     </div>
-                    <div class="left-border-dash">{{ row.content }}</div>
-                   {% for s in row.eticketsolution_set.all %}
                        <div class="section-header">
-                        <b>Solution</b>
+                            <b>{{ row.user }}</b>
                             <span class="right">
-                                {{ s.created_time }} <b>{{ eticket.processor }}</b>
+                                {{ row.created_time }}
                             </span>
+
                        </div>
-                       <div class="left-border-dash">{{ s.content }}</div>
-                   {% endfor %}
+
+                       <div class="left-border-dash">{{ row.content|safe }}</div>
 
            </div>
 
        {% endfor %}
-        <form method="POST">
+        <div class="section-header">
+            <b>Reply</b>
+
+        </div>
+        <form action="" method="post" novalidate="True">
 
                 {% csrf_token %}
-                    <div class="section-header">
-                        <b>Submit a Question</b>
 
-                    </div>
                     <div class="form-group">
                     {{ form.content }}
                     </div>

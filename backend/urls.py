@@ -3,8 +3,10 @@ from . import views
 
 
 urlpatterns = [
-    re_path(r'^add-eticket.html$', views.add_eticket, name='add_eticket'),
+    re_path(r'^admin-eticket-(?P<nid>\d+).html/snatch$', views.admin_snatch, name='snatch'),
+    re_path(r'^admin-eticket-(?P<eticket_id>\d+).html$', views.admin_eticket_detail, name='admin_eticket_detail'),
     re_path(r'^admin-eticket-list.html$', views.admin_eticket_list, name='admin_eticket_list'),
+    re_path(r'^add-eticket.html$', views.add_eticket, name='add_eticket'),
 
     re_path(r'^etickets.html$', views.eticket_list, name='eticket_list'),
     re_path(r'^eticket-(?P<eticket_id>\d+)-detail.html$', views.eticket_detail, name='eticket_detail'),

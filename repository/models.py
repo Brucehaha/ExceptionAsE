@@ -144,9 +144,7 @@ class Comment(models.Model):
     content = models.TextField()
 
 
-
 class ETicket(models.Model):
-
     nid = models.BigAutoField(primary_key=True)
     claimer = models.ForeignKey(to='UserInfo', to_field='nid', related_name="claimer", on_delete=models.CASCADE)
     subject = models.CharField(max_length=32)
@@ -160,15 +158,24 @@ class ETicket(models.Model):
     ]
     status = models.IntegerField(choices=status_choices, default=0)
 
+    def __str__(self):
+        return str(self.subject)
 
-class ETicketContent(models.Model):
+
+class ETicketReply(models.Model):
     content = models.TextField()
     ticket = models.ForeignKey(to=ETicket, to_field='nid', on_delete=models.CASCADE)
-    created_time = models.DateTimeField(auto_now_add=True)
-
-
-class ETicketSolution(models.Model):
-    content = models.TextField()
-    reply = models.ForeignKey(to=ETicketContent, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=UserInfo, to_field='nid', on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "%s-%s" %(self.user, self.ticket)
+
+
+#
+# class ETicketSolution(models.Model):
+#     content = models.TextField()
+#     reply = models.ForeignKey(to=ETicketContent, on_delete=models.CASCADE)
+#     created_time = models.DateTimeField(auto_now_add=True)
+#     is_read = models.BooleanField(default=False)

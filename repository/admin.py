@@ -12,8 +12,8 @@ admin.site.register(models.Comment)
 admin.site.register(models.Tag)
 admin.site.register(models.Article2Tag)
 admin.site.register(models.ETicket)
-admin.site.register(models.ETicketContent)
-admin.site.register(models.ETicketSolution)
+admin.site.register(models.ETicketReply)
+# admin.site.register(models.ETicketSolution)
 
 
 

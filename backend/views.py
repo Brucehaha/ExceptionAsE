@@ -166,14 +166,13 @@ def add_eticket(request):
             try:
                 with transaction.atomic():
                     eticket = models.ETicket.objects.create(**data)
-                    print(eticket)
-                    models.ETicketContent.objects.create(content=content, ticket=eticket)
+                    models.ETicketReply.objects.create(content=content, ticket=eticket, user_id=user_id)
             except Exception as e:
                 return HttpResponse(e)
 
-            print(reverse('eticket_detail', kwargs={'eticket_id': eticket.nid}))
             return redirect(reverse('eticket_detail', kwargs={'eticket_id': eticket.nid}))
     return render(request, 'backend/add_eticket.html', {'form': obj})
+
 
 
 
@@ -184,25 +183,23 @@ def eticket_detail(request, eticket_id):
     :param eticket_id:
     :return:
     """
-    user_id = request.session.get('user_info')['nid']
-    form_obj = form.ETicketForm()
-    if user_id:
-        obj = form.ETicketForm()
-        if request.method == "GET":
-            eticket = models.ETicket.objects.filter(nid=eticket_id, claimer_id=user_id).first()
-            return render(request, 'backend/backend_article_detail.html', {'eticket': eticket, 'form':form_obj})
-        if request.method == "POST":
-            eticket = models.ETicket.objects.filter(nid=eticket_id, claimer_id=user_id).first()
-            obj = form_obj(data=request.POST)
-            if obj.is_valid():
-                if eticket:
-                    content = obj.cleaned_data.pop('content')
-                    models.ETicketContent.create(eticket=eticket, content=content)
-                else:
-                    return HttpResponse('FUCK OFF')
-            return redirect('eticket_detail', kwargs={'eticket_id': eticket_id})
-    else:
-        return redirect('/login.html')
+    user_id =request.session['user_info']['nid']
+    obj = form.ETicketReplyForm()
+    print(request)
+    if request.method == "GET":
+        eticket = models.ETicket.objects.filter(nid=eticket_id, claimer_id=user_id).first()
+        return render(request, 'backend/backend_eticket_detail.html', {'eticket': eticket, 'form':obj})
+    if request.method == "POST":
+        eticket = models.ETicket.objects.filter(nid=eticket_id, claimer_id=user_id).first()
+        obj = form.ETicketReplyForm(data=request.POST)
+        if obj.is_valid():
+            if eticket:
+                content = obj.cleaned_data['content']
+                models.ETicketReply.objects.create(ticket=eticket, content=content, user_id=user_id)
+            else:
+                return HttpResponse('FUCK OFF')
+        return redirect(reverse('eticket_detail', kwargs={'eticket_id': eticket_id}))
+
 
 
 
@@ -217,6 +214,47 @@ def admin_eticket_list(request):
         eticket_list = models.ETicket.objects.filter(Q(status=0)|Q(processor_id=user_id))
         return render(request, 'backend/admin_eticket_list.html', {'etickets': eticket_list})
     return redirect('/login.html')
+
+
+def admin_eticket_detail(request, eticket_id):
+    """
+    manage client's claim, need add permission for admin role only
+    :param request:
+    :param eticket_id:
+    :return:
+    """
+    obj = form.ETicketSolutionForm()
+    user_id = request.session.get('user_info')['nid']
+    eticket = models.ETicket.objects.filter(nid=eticket_id).first()
+    if eticket.processor_id == user_id:
+        if request.method == 'POST':
+            obj = form.ETicketReplyForm(data=request.POST)
+            if obj.is_valid():
+                content=obj.cleaned_data.pop('content')
+                data = {
+                    'content': content,
+                    'ticket': eticket,
+                    'user_id': user_id
+
+                }
+                models.ETicketReply.objects.create(**data)
+                obj = form.ETicketSolutionForm()
+
+        return render(request, 'backend/admin_eticket_detail.html', {'eticket': eticket, 'form': obj})
+    else:
+        return HttpResponse("No access permission")
+
+
+def admin_snatch(request, nid):
+    user_id =request.session['user_info']['nid']
+    count = models.ETicket.objects.filter(nid=nid, status=0).update(processor_id=user_id, status=1)
+    if count==0:
+        return HttpResponse('TOO SLOW')
+    else:
+        return redirect(reverse('eticket_detail', kwargs={'eticket_id': nid}))
+
+
+
 
 
 
