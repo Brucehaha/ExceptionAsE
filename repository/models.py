@@ -171,11 +171,3 @@ class ETicketReply(models.Model):
 
     def __str__(self):
         return "%s-%s" %(self.user, self.ticket)
-
-
-#
-# class ETicketSolution(models.Model):
-#     content = models.TextField()
-#     reply = models.ForeignKey(to=ETicketContent, on_delete=models.CASCADE)
-#     created_time = models.DateTimeField(auto_now_add=True)
-#     is_read = models.BooleanField(default=False)

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'repository',
     'web',
     'backend',
+    'rbac',
 ]
 
 MIDDLEWARE = [
