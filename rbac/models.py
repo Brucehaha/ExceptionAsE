@@ -31,16 +31,13 @@ class Menu(models.Model):
     parent = models.ForeignKey('self', related_name='p', null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return '%s-%s' %(self.caption, self.parent)
+        return '%s' %(self.caption)
 
 
 class Permission(models.Model):
     caption = models.CharField(max_length=32)
     url = models.CharField(max_length=32)
-    menu = models.ForeignKey(to=Menu, null=True, blank=True, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name_plural = "Permission URL"
+    menu = models.OneToOneField(to=Menu, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.url)
@@ -59,7 +56,7 @@ class Permission2Action(models.Model):
     a = models.ForeignKey(Action, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name_plural = "Permission List"
+        verbose_name_plural = "Permission Action"
         unique_together = [
             ('p', 'a'),
         ]
@@ -76,7 +73,7 @@ class Permission2Action2Role(models.Model):
         verbose_name_plural = "Role's Permission"
 
     def __str__(self):
-        return '%s-%s' %(self.r, self.p2a)
+        return '%s-%s' % (self.r, self.p2a)
 
 
 

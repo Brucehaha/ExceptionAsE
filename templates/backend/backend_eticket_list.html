@@ -34,7 +34,7 @@
             <tbody>
             {% for row in etickets %}
                 <tr nid="{{ row.nid }}">
-                    <td><a href="/backend/eticket-{{ row.nid }}.html">{{ row.nid }}</a></td>
+                    <td><a href="{% url 'eticket_detail' eticket_id=row.nid %}">{{ row.nid }}</a></td>
                     <td><a href="/backend/eticket-{{ row.nid }}.html">{{ row.subject }}</a></td>
                     <td>{{ row.created_time }}</td>
                     <td>{{ row.get_status_display }}</td>
