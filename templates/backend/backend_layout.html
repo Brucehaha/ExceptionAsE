@@ -7,7 +7,21 @@
     <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/static/css/backend/backend-layout.css">
 
+        <style>
+        ul {
+            list-style: none;
+            padding:0;
+        }
+        ul ul{
+            display:none;
+            padding-left:20px
+        }
+        ul span{
+            padding-left:5px;
+        }
 
+
+    </style>
     {% block css %}
 
     {% endblock %}
@@ -88,28 +102,10 @@
 <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script>
-    $(function () {
-        $('.depth-1 > div').each(function(){
-            $(this).addClass('hide')
-
-        });
-        $('.depth-1').click(function(){
-            $('.depth-1 > div').each(function(){
-                if($(this).hasClass('hide')){
-                     $(this).removeClass('hide')
-                }else{
-                    $(this).addClass('hide')
-                }
-
-
-
-
-        });
-        });
-
-
-    })
-
+    $('li').click(function(ev) {
+        $(this).find('>ul').slideToggle();
+        ev.stopPropagation();
+    });
 </script>
     {% block js %}
 

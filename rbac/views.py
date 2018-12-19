@@ -9,7 +9,7 @@ class PermissionHandler:
         self.current_path = request.path_info
         self.roles = None
         self.p2a_dict = None
-        self.menu_strings = ""
+        self.menu_strings = ''
         self.session_data()
 
     def session_data(self):
@@ -53,7 +53,7 @@ class PermissionHandler:
             x = {
                 'id': x['id'],
                 'caption': x['caption'],
-                'url': permited_menu_dict.get(x['id'], "JavaScript:Void(0);"),
+                'url': permited_menu_dict.get(x['id'], "javaScript:void(0);"),
                 'child': [],
                 'parent_id': x['parent_id'],
 
@@ -98,7 +98,8 @@ class PermissionHandler:
         :return:
         """
         self.add_menu(menu_stem, depth)
-        return ''.join(self.menu_strings)
+        print(self.menu_strings)
+        return self.menu_strings
 
     def add_menu(self, menu_stem, depth):
         """
@@ -108,18 +109,21 @@ class PermissionHandler:
         :return:
         """
         for x in menu_stem:
-            if x['child'] == [] and x['parent_id'] is not None and x['url'] == "JavaScript:Void(0);":
+            if not x['child'] and x['parent_id'] is not None and x['url'] == "javaScript:void(0);":
                 pass
             else:
-                html_start = '<div class="nav-item depth-%s"> <a href="%s">%s</a>'
-                if depth == 1:
-                    html_start = '<div class="nav-item depth-%s"> <a href="%s"><i class="fa fa-cogs" aria-hidden="true"></i><span>%s</span></a>'
+                html_start = '<ul><li><a class="nav-item depth-%s" href="%s"><span>%s</span></a>'
 
-                html_end = '</div>'
+                if depth==1:
+                    html_start = '<ul><li><a class="nav-item depth-%s" href="%s"><i class="fa fa-cogs" aria-hidden="true"></i><span>%s</span></a>'
                 self.menu_strings += html_start % (depth, x['url'], x['caption'])
-                # self.menu_strings.append(self.menu_html(x, depth))
-                self.add_menu(x['child'], depth + 1)
+                print(x)
+
+                if x['child']:
+                    self.add_menu(x['child'], depth + 1)
+                html_end = '</li></ul>'
                 self.menu_strings += html_end
+
 
 
 def permission(func):
