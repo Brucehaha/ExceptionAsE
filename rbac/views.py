@@ -1,107 +1,137 @@
-from django.shortcuts import render, HttpResponse
 from . import models
+from django.shortcuts import redirect, HttpResponse
+import re
 
 
 class PermissionHandler:
-    def init(self, request):
+    def __init__(self, request):
         self.request = request
         self.current_path = request.path_info
+        self.roles = None
+        self.p2a_dict = None
+        self.menu_strings = ""
         self.session_data()
 
     def session_data(self):
-        user_id = self.request.session.get('user_info')['nid']
-        role = models.Role.objects.filter(user2role__u_id=user_id)
-        permissions = models.Permission.objects.filter(permission2action__permission2action2role__r__in=role).distinct()
-        permited_menu_list = models.Menu.objects.filter(permission__in=permissions).values('id', 'caption', 'parent_id',
-                                                                                 'permission__url')
+        """
+        store data in session for display menus and verify the url after login
+        :return:
+        """
+        permission_dict = self.request.session.get('permission_info')
+        if permission_dict:
+            self.p2a_dict = permission_dict['p2a_dict']
+        else:
+            user_id = self.request.session['user_info']['nid']
+            self.roles = models.Role.objects.filter(user2role__u_id=user_id)
+            p2a_list = models.Permission2Action.objects.filter(permission2action2role__r__in=self.roles).\
+                values('p__url', 'a__method').distinct()
+            p2a_dict ={}
+            for x in p2a_list:
+                if x['p__url'] in p2a_dict:
+                    p2a_dict[x['p__url']].append(x['a__method'])
+                else:
+                    p2a_dict[x['p__url']] = [x['a__method'],]
+
+            data = {
+
+                'p2a_dict': p2a_dict,
+                'menus': self.menus()
+            }
+
+            self.request.session['permission_info'] = data
+
+    def menus(self):
+        permited_menu_list = models.Permission2Action.objects.filter(permission2action2role__r__in=self.roles). \
+            values('p__menu', 'p__url').distinct()
         menu_list = models.Menu.objects.values('id', 'caption', 'parent_id')
         permited_menu_dict = {}
-        menu_dict = {}
+        menu_dict =  {}
         parents = {}
-
         for x in permited_menu_list:
-            permited_menu_dict[x['id']] = x['permission__url']
-
+            permited_menu_dict[x['p__menu']] = x['p__url']
         for x in menu_list:
             x = {
                 'id': x['id'],
                 'caption': x['caption'],
-                'url': permited_menu_dict.get(x['id'], None),
+                'url': permited_menu_dict.get(x['id'], "JavaScript:Void(0);"),
                 'child': [],
                 'parent_id': x['parent_id'],
 
             }
             # let id be the key of new dict
             parents[x['id']] = x
-
             # let parent id be the key of new dict
-            # e.g {3:[{'id':1, 'caption':menu, 'parent_id'}, {example}], 4:[{'id':1, 'caption':menu, 'parent_id'}, {example}]}
-
             if x['parent_id']:
                 if x['parent_id'] in menu_dict:
                     menu_dict[x['parent_id']].append(x)
                 else:
                     menu_dict[x['parent_id']] = [x, ]
 
-        # loop throgh menu dict(menu_list) add child
+        # get menu tree
         for k, v in menu_dict.items():
             parents[k]['child'].extend(v)
 
-        # loop to filter and get menu with no parent
+        # loop to menu tree  and get menu with no parent_id
         menu_stem = []
         for x in parents.values():
             if x['parent_id'] is None:
                 menu_stem.append(x)
 
-        menu_final = self.collect_menu(menu_stem)
+        return self.menu_tree(menu_stem)
 
-        permission_info = {
-            'menus': menu_final
-        }
 
-        self.request.session['menu_list'] = permission_info
+    def verify(self):
+        method = []
+        print(self.current_path)
+        for k, v in self.p2a_dict.items():
+            if re.match(k, self.current_path):
+                print(k, self.current_path)
+                method = v
+                break
+        return method
 
-    def collect_menu(self, menu_stem, depth=1):
-        menu_strings = []
-        def menu_string(menu_stem, depth):
-            for x in menu_stem:
-                menu_strings.append(self.menu_html(x, depth))
-                menu_string(x['child'], depth+1)
-        menu_string(menu_stem, depth)
-        return ''.join(menu_strings)
-
-    @staticmethod
-    def menu_html(menu, depth):
+    def menu_tree(self, menu_stem, depth=1):
         """
-        create menu html
-        :param menu:
+        get the dict menu_stem, loop through get all the menu attached to parent and return html menu
+        :param menu_stem:
         :param depth:
         :return:
         """
+        self.add_menu(menu_stem, depth)
+        return ''.join(self.menu_strings)
 
-        if depth == 1:
-            if menu['url'] is not None:
-                html_string = '''
-                    <a class="nav-item" href="%s">
-                        <i class="fa fa-cogs" aria-hidden="true"></i>
-                        <span>%s</span>
-                    </a>
-                ''' % (menu['url'], menu['caption'])
+    def add_menu(self, menu_stem, depth):
+        """
+        recursive function, loop through the menu stem
+        :param menu_stem:
+        :param depth:
+        :return:
+        """
+        for x in menu_stem:
+            if x['child'] == [] and x['parent_id'] is not None and x['url'] == "JavaScript:Void(0);":
+                pass
             else:
-                html_string = '''
-                    <a class="nav-item">
-                        <i class="fa fa-cogs" aria-hidden="true"></i>
-                        <span>%s</span>
-                    </a>
-                ''' % (menu['caption'])
-        elif menu['child'] == [] and menu['parent_id'] is not None and menu['url'] == None:
-            html_string = ""
-        else:
-            if menu['url'] is not None:
-                html_string = '''<a class="nav-item" style="padding-left:%spx" href="%s"><span>%s</span></a>        
-                ''' % (depth*15, menu['url'], menu['caption'])
-            else:
-                html_string = '''<a class="nav-item" style="padding-left:%spx" ><span>%s</span></a>        
-                ''' % (depth*15,  menu['caption'])
-        return html_string
+                html_start = '<div class="nav-item depth-%s"> <a href="%s">%s</a>'
+                if depth == 1:
+                    html_start = '<div class="nav-item depth-%s"> <a href="%s"><i class="fa fa-cogs" aria-hidden="true"></i><span>%s</span></a>'
+
+                html_end = '</div>'
+                self.menu_strings += html_start % (depth, x['url'], x['caption'])
+                # self.menu_strings.append(self.menu_html(x, depth))
+                self.add_menu(x['child'], depth + 1)
+                self.menu_strings += html_end
+
+
+def permission(func):
+    def inner(request, *args, **kwargs):
+        user_info = request.session.get('user_info')
+        if not user_info:
+            return redirect('/account/login.html')
+        perm = PermissionHandler(request)
+        method = perm.verify()
+        if not method:
+            return HttpResponse('Not Authorized to access')
+        kwargs['method'] = method
+        return func(request, *args, **kwargs)
+    return inner
 

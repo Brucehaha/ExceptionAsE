@@ -4,6 +4,7 @@ from io import BytesIO
 from ..forms.account import LoginForm
 from repository import models
 import json
+from rbac.views import PermissionHandler
 
 
 def check_code(request):
@@ -16,7 +17,6 @@ def check_code(request):
 def logout(request):
     request.session.clear()
     return redirect('/')
-
 
 def login(request):
     """
@@ -36,12 +36,14 @@ def login(request):
                         filter(email=email, password=password).\
                         values("nid","username", "email", "avatar", "blog__nid", 'blog__site').first()
             if user_info:
+
                 data['status']=True
                 data['message'] = "thank you"
                 request.session['user_info']=user_info
                 if form_obj.cleaned_data.get('month'):
                     print(form_obj.cleaned_data.get('month'))
                     request.session.set_expiry(60 * 60 * 24 * 30)
+                PermissionHandler(request)
             else:
                 data['message'] = 'email or password is incorrect'
         else:

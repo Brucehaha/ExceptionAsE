@@ -12,6 +12,9 @@ body{
     color: white;
 
 }
+.hide {
+    display:none!important;
+}
 .header .logo {
     background: #0c5460;
     height:68px;

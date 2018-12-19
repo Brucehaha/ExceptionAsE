@@ -4,8 +4,10 @@ from utils.pager import Pagination
 from .forms import form
 from django.db import transaction
 from django.db.models import Q
+from rbac.views import permission
 
 
+@permission
 def article_list(request, *args, **kwargs):
     """
     list the articles by conditions
@@ -21,7 +23,12 @@ def article_list(request, *args, **kwargs):
         if v == '0':
             pass
         else:
-            conditions[k] = int(v)
+            try:
+                v=int(v)
+            except Exception as e:
+                print(e)
+            else:
+                conditions[k] = int(v)
     conditions['blog_id'] = blog_id
 
     articles_counts = models.Article.objects.filter(**conditions).count()
@@ -45,8 +52,8 @@ def article_list(request, *args, **kwargs):
     }
     return render(request, 'backend/backend_article_list.html', data)
 
-
-def add_article(request):
+@permission
+def add_article(request, *args, **kwargs):
     """
     create new article
     :param request:
@@ -82,8 +89,8 @@ def add_article(request):
         else:
             return redirect("/account/login.html")
 
-
-def edit_article(request, article_id):
+@permission
+def edit_article(request, article_id, *args, **kwargs):
     """
     eidit arthcle
     :param request:
@@ -137,16 +144,16 @@ def edit_article(request, article_id):
     else:
         return redirect('/login.html')
 
-
-def eticket_list(request):
+@permission
+def eticket_list(request, *args, **kwargs):
     user_id = request.session.get('user_info')['nid']
     if user_id:
         etickets = models.ETicket.objects.filter(claimer_id=user_id)
         return render(request, 'backend/backend_eticket_list.html', {'etickets': etickets})
     return redirect('/login.html')
 
-
-def add_eticket(request):
+@permission
+def add_eticket(request, *args, **kwargs):
     """
     for normal user
     :param request:
@@ -175,8 +182,8 @@ def add_eticket(request):
 
 
 
-
-def eticket_detail(request, eticket_id):
+@permission
+def eticket_detail(request, eticket_id, *args, **kwargs):
     """
     edit
     :param request:
@@ -202,8 +209,8 @@ def eticket_detail(request, eticket_id):
 
 
 
-
-def admin_eticket_list(request):
+@permission
+def admin_eticket_list(request, *args, **kwargs):
     """
     for admin role only, need to use permission for role to limit the access
     :param request:
@@ -215,8 +222,8 @@ def admin_eticket_list(request):
         return render(request, 'backend/admin_eticket_list.html', {'etickets': eticket_list})
     return redirect('/login.html')
 
-
-def admin_eticket_detail(request, eticket_id):
+@permission
+def admin_eticket_detail(request, eticket_id, *args, **kwargs):
     """
     manage client's claim, need add permission for admin role only
     :param request:
@@ -244,8 +251,8 @@ def admin_eticket_detail(request, eticket_id):
     else:
         return HttpResponse("No access permission")
 
-
-def admin_snatch(request, nid):
+@permission
+def admin_snatch(request, nid, *args, **kwargs):
     user_id =request.session['user_info']['nid']
     count = models.ETicket.objects.filter(nid=nid, status=0).update(processor_id=user_id, status=1)
     if count==0:
